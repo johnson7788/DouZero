@@ -5,7 +5,7 @@
 [![Downloads](https://pepy.tech/badge/douzero/month)](https://pepy.tech/project/douzero)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/daochenzha/douzero-colab/blob/main/douzero-colab.ipynb)
 
-DouZero is a reinforcement learning framework for  [DouDizhu](https://en.wikipedia.org/wiki/Dou_dizhu) ([斗地主](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997)), the most popular card game in China. It is a shedding-type game where the player’s objective is to empty one’s hand of all cards before other players. DouDizhu is a very challenging domain with competition, collaboration, imperfect information, large state space, and particularly a massive set of possible actions where the legal actions vary significantly from turn to turn. DouZero is developed by AI Platform, Kwai Inc. (快手).
+DouZero是一个针对[斗地主](https://en.wikipedia.org/wiki/Dou_dizhu)的强化学习框架，斗地主是中国最流行的纸牌游戏。这是一个甩牌游戏，玩家的目标是在其他玩家之前清空自己手中的所有牌。斗地主是一个非常具有挑战性的领域，有竞争、协作、不完美的信息、大的状态空间，特别是有大量可能的行动，其中合法的行动在不同的回合有很大的不同。斗地主是由人工智能平台(快手)开发。
 
 *   Online Demo: [https://www.douzero.org/](https://www.douzero.org/)
 *   Run the Demo Locally: [https://github.com/datamllab/rlcard-showdown](https://github.com/datamllab/rlcard-showdown)
@@ -35,9 +35,8 @@ Zha, Daochen, et al. "DouZero: Mastering DouDizhu with Self-Play Deep Reinforcem
 ```
 
 ## What Makes DouDizhu Challenging?
-In addition to the challenge of imperfect information, DouDizhu has huge state and action spaces. In particular, the action space of DouDizhu is 10^4 (see [this table](https://github.com/datamllab/rlcard#available-environments)). Unfortunately, most reinforcement learning algorithms can only handle very small action spaces. Moreover, the players in DouDizhu need to both compete and cooperate with others in a partially-observable environment with limited communication, i.e., two Peasants players will play as a team to fight against the Landlord player. Modeling both competing and cooperation is an open research challenge.
-
-In this work, we propose Deep Monte Carlo (DMC) algorithm with action encoding and parallel actors. This leads to a very simple yet surprisingly effective solution for DouDizhu. Please read [our paper](https://arxiv.org/abs/2106.06135) for more details.
+除了信息不完善的挑战外，DouDizhu有巨大的状态和行动空间。特别是，DouDizhu的行动空间是10^4（见[此表](https://github.com/datamllab/rlcard#available-environments)）。不幸的是，大多数强化学习算法只能处理非常小的行动空间。此外，斗地主中的玩家需要在一个部分可观察的环境中与他人竞争和合作，并且沟通有限，例如，两个农民玩家将作为一个团队与地主玩家进行对抗。对竞争和合作进行建模是一个开放的研究挑战。
+在这项工作中，我们提出了带有动作编码和平行actor的深度蒙特卡洛（DMC）算法。这导致了一个非常简单但令人惊讶的斗地主的有效解决方案。请阅读[我们的论文]（https://arxiv.org/abs/2106.06135）以了解更多细节。
 
 ## Installation
 Clone the repo with
@@ -49,31 +48,31 @@ Make sure you have python 3.6+ installed. Install dependencies:
 cd douzero
 pip3 install -r requirements.txt
 ```
-We recommend installing the stable version of DouZero with
+我们建议使用安装稳定版本的Douzero 
 ```
 pip3 install douzero
 ```
-or install the up-to-date version (it could be not stable) with
+或安装最新版本（它可能不稳定） 
 ```
 pip3 install -e .
 ```
 
 ## Training
-We assume you have at least one GPU available. Run
+我们假设您至少有一个可用的GPU。 Run
 ```
 python3 train.py
 ```
-This will train DouZero on one GPU. To train DouZero on multiple GPUs. Use the following arguments.
-*   `--gpu_devices`: what gpu devices are visible
-*   `--num_actors_devices`: how many of the GPU deveices will be used for simulation, i.e., self-play
-*   `--num_actors`: how many actor processes will be used for each device
-*   `--training_device`: which device will be used for training DouZero
+这将在一个GPU上训练DouZero。要在多个GPU上训练DouZero。请使用以下参数。
+*   `--gpu_devices`: GPU设备是可见的 
+*   `--num_actors_devices`: 有多少个GPU节点将被用于模拟，即自我对战
+*   `--num_actors`:每个设备将使用多少个actor进程 
+*   `--training_device`: 哪个设备将用于训练Douzero 
 
-For example, if we have 4 GPUs, where we want to use the first 3 GPUs to have 15 actors each for simulating and the 4th GPU for training, we can run the following command:
+例如，如果我们有4个GPU，其中我们想用前3个GPU分别有15个actor进行模拟，第4个GPU用于训练，我们可以运行以下命令。
 ```
 python3 train.py --gpu_devices 0,1,2,3 --num_actors_devices 3 --num_actors 15 --training_device 3
 ```
-For more customized configuration of training, see the following optional arguments:
+有关更多自定义的训练配置，请参阅以下可选参数：
 ```
 --xpid XPID           Experiment id (default: douzero)
 --save_interval SAVE_INTERVAL
@@ -112,18 +111,18 @@ For more customized configuration of training, see the following optional argume
 ```
 
 ## Evaluation
-The evaluation can be performed with GPU or CPU (GPU will be much faster). Pretrained model is available at [Google Drive](https://drive.google.com/drive/folders/1NmM2cXnI5CIWHaLJeoDZMiwt6lOTV_UB?usp=sharing) or [百度网盘](https://pan.baidu.com/s/18g-JUKad6D8rmBONXUDuOQ), 提取码: 4624. Put pre-trained weights in `baselines/`. The performance is evaluated through self-play. We have provided pre-trained models and some heuristics as baselines:
+评估可以用GPU或CPU进行（GPU会更快）。预训练模型可在[Google Drive](https://drive.google.com/drive/folders/1NmM2cXnI5CIWHaLJeoDZMiwt6lOTV_UB?usp=sharing)或[百度网盘](https://pan.baidu.com/s/18g-JUKad6D8rmBONXUDuOQ)下载，提取码。4624. 把预训练的权重放在`baselines/`中。通过自我对战来评估性能。我们已经提供了预训练的模型和一些启发式方法作为基线。
 *   [random](douzero/evaluation/random_agent.py): agents that play randomly (uniformly)
 *   [rlcard](douzero/evaluation/rlcard_agent.py): the rule-based agent in [RLCard](https://github.com/datamllab/rlcard)
-*   SL (`baselines/sl/`): the pre-trained deep agents on human data
-*   DouZero-ADP (`baselines/douzero_ADP/`): the pretrained DouZero agents with Average Difference Points (ADP) as objective
-*   DouZero-WP (`baselines/douzero_WP/`): the pretrained DouZero agents with Winning Percentage (WP) as objective
+*   SL (`baselines/sl/`): 预训练的人类数据的深度agent 
+*   DouZero-ADP (`baselines/douzero_ADP/`): 预训练的Douzero agent，Average Difference Points（ADP）为目标
+*   DouZero-WP (`baselines/douzero_WP/`): 预训练的Douzero agent，Winning Percentage（WP）作为目标
 
 ### Step 1: Generate evaluation data
 ```
 python3 generate_eval_data.py
 ```
-Some important hyperparameters are as follows.
+一些重要的超参数如下。 
 *   `--output`: where the pickled data will be saved
 *   `--num_games`: how many random games will be generated, default 10000
 
@@ -137,19 +136,19 @@ Some important hyperparameters are as follows.
 *   `--landlord_down`: which agent will play as LandlordDown (the one plays after the Landlord), which can be random, rlcard, or the path of the pre-trained model
 *   `--eval_data`: the pickle file that contains evaluation data
 
-For example, the following command evaluates DouZero-ADP in Landlord position against random agents
+例如，下面的命令在地主位置对随机agent进行DouZero-ADP评估
 ```
 python3 evaluate.py --landlord baselines/douzero_ADP/landlord.ckpt --landlord_up random --landlord_down random
 ```
-The following command evaluates DouZero-ADP in Peasants position against RLCard agents
+以下命令评估Douzero-ADP在对RLCard agent的农民职位
 ```
 python3 evaluate.py --landlord rlcard --landlord_up baselines/douzero_ADP/landlord_up.ckpt --landlord_down baselines/douzero_ADP/landlord_down.ckpt
 ```
-By default, our model will be saved in `douzero_checkpoints/douzero` every half an hour. We provide a script to help you identify the most recent checkpoint. Run
+默认情况下，我们的模型将每半小时保存在`douzero_checkpoints/douzero`中。我们提供一个脚本来帮助你识别最近的checkpoint。运行
 ```
 sh get_most_recent.sh douzero_checkpoints/douzero/
 ```
-The most recent model will be in `most_recent_model`.
+最近的模型将在“most_recent_model”目录中。
 
 ## Core Team
 *   Algorithm: [Daochen Zha](https://github.com/daochenzha), [Jingru Xie](https://github.com/karoka), Wenye Ma, Sheng Zhang, [Xiangru Lian](https://xrlian.com/), Xia Hu, [Ji Liu](http://jiliu-ml.org/)
