@@ -123,18 +123,18 @@ python3 train.py --gpu_devices 0,1,2,3 --num_actors_devices 3 --num_actors 15 --
 python3 generate_eval_data.py
 ```
 一些重要的超参数如下。 
-*   `--output`: where the pickled data will be saved
-*   `--num_games`: how many random games will be generated, default 10000
+*   `--output`: picked数据将保存
+*   `--num_games`: 将生成多少个随机游戏，默认为10000
 
 ### Step 2: Self-Play
 ```
 python3 evaluate.py
 ```
-Some important hyperparameters are as follows.
-*   `--landlord`: which agent will play as Landlord, which can be random, rlcard, or the path of the pre-trained model
-*   `--landlord_up`: which agent will play as LandlordUp (the one plays before the Landlord), which can be random, rlcard, or the path of the pre-trained model
-*   `--landlord_down`: which agent will play as LandlordDown (the one plays after the Landlord), which can be random, rlcard, or the path of the pre-trained model
-*   `--eval_data`: the pickle file that contains evaluation data
+一些重要的超参数如下。 
+*   `--landlord`: 哪个agent将扮演地主，可以是随机的，也可以是rlcard，或者是预训练过的模型的路径。 
+*   `--landlord_up`: 哪个agent将作为地主上家（在地主之前上场的agent），可以是随机的，也可以是rlcard，或者是预训练好的模型的路径。 
+*   `--landlord_down`: 哪一个agent将作为Landlord下家（在地主之后进行游戏），可以是随机的、rlcard或预训练好的模型的路径。
+*   `--eval_data`: 包含评估数据的pickle文件 
 
 例如，下面的命令在地主位置对随机agent进行DouZero-ADP评估
 ```
