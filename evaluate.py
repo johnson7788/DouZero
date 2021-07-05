@@ -4,10 +4,9 @@ import argparse
 from douzero.evaluation.simulation import evaluate
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-                    'Dou Dizhu Evaluation')
+    parser = argparse.ArgumentParser('斗地主的评估')
     parser.add_argument('--landlord', type=str,
-            default='baselines/douzero_ADP/landlord.ckpt')
+            default='baselines/douzero_ADP/landlord.ckpt',help='地主的模型')
     parser.add_argument('--landlord_up', type=str,
             default='baselines/sl/landlord_up.ckpt')
     parser.add_argument('--landlord_down', type=str,

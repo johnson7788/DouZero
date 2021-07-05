@@ -97,7 +97,7 @@ class FileWriter:
             self._logger.info('Creating log directory: %s', self.basepath)
             os.makedirs(self.basepath, exist_ok=True)
         else:
-            self._logger.info('Found log directory: %s', self.basepath)
+            self._logger.info('发现日志的目录,目录的位置是: %s', self.basepath)
 
         # NOTE: remove latest because it creates errors when running on slurm 
         # multiple jobs trying to write to latest but cannot find it 
@@ -116,14 +116,14 @@ class FileWriter:
             meta='{base}/meta.json'.format(base=self.basepath),
         )
 
-        self._logger.info('Saving arguments to %s', self.paths['meta'])
+        self._logger.info('保存参数的路径是：%s', self.paths['meta'])
         if os.path.exists(self.paths['meta']):
             self._logger.warning('Path to meta file already exists. '
                                  'Not overriding meta.')
         else:
             self._save_metadata()
 
-        self._logger.info('Saving messages to %s', self.paths['msg'])
+        self._logger.info('保存消息的路径：%s', self.paths['msg'])
         if os.path.exists(self.paths['msg']):
             self._logger.warning('Path to message file already exists. '
                                  'New data will be appended.')
@@ -132,7 +132,7 @@ class FileWriter:
         fhandle.setFormatter(formatter)
         self._logger.addHandler(fhandle)
 
-        self._logger.info('Saving logs data to %s', self.paths['logs'])
+        self._logger.info('保存日志的路径是： %s', self.paths['logs'])
         self._logger.info('Saving logs\' fields to %s', self.paths['fields'])
         if os.path.exists(self.paths['logs']):
             self._logger.warning('Path to log file already exists. '

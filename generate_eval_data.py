@@ -26,7 +26,6 @@ def generate():
         card_play_data[key].sort()
     return card_play_data
 
-
 if __name__ == '__main__':
     flags = get_parser().parse_args()
     output_pickle = flags.output + '.pkl'

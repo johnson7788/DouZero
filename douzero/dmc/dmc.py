@@ -54,12 +54,17 @@ def learn(position,
             actor_model.get_model(position).load_state_dict(model.state_dict())
         return stats
 
-def train(flags):  
+def train(flags):
+    """
+    训练的函数
+    """
+    #日志，消息，参数等保存的路径
     plogger = FileWriter(
         xpid=flags.xpid,
         xp_args=flags.__dict__,
         rootdir=flags.savedir,
     )
+    # checkpoint路径
     checkpointpath = os.path.expandvars(
         os.path.expanduser('%s/%s/%s' % (flags.savedir, flags.xpid, 'model.tar')))
 

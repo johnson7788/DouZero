@@ -131,12 +131,12 @@ python3 generate_eval_data.py
 python3 evaluate.py
 ```
 一些重要的超参数如下。 
-*   `--landlord`: 哪个agent将扮演地主，可以是随机的，也可以是rlcard，或者是预训练过的模型的路径。 
+*   `--landlord`: 哪个agent将扮演地主，可以是随机的，也可以是rlcard，或者是预训练过的模型的路径。rlcard是另一个斗地主的算法的包 
 *   `--landlord_up`: 哪个agent将作为地主上家（在地主之前上场的agent），可以是随机的，也可以是rlcard，或者是预训练好的模型的路径。 
 *   `--landlord_down`: 哪一个agent将作为Landlord下家（在地主之后进行游戏），可以是随机的、rlcard或预训练好的模型的路径。
 *   `--eval_data`: 包含评估数据的pickle文件 
 
-例如，下面的命令在地主位置对随机agent进行DouZero-ADP评估
+例如，下面的命令在地主位置对随机agent进行DouZero-ADP评估， ADP：平均分数的评估，不是按胜率计算，这个是按照加倍与不加倍的分数计算
 ```
 python3 evaluate.py --landlord baselines/douzero_ADP/landlord.ckpt --landlord_up random --landlord_down random
 ```
