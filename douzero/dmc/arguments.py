@@ -14,13 +14,13 @@ parser.add_argument('--objective', default='adp', type=str, choices=['adp', 'wp'
 parser.add_argument('--gpu_devices', default='0', type=str,
                     help='哪个GPU用于训练')
 parser.add_argument('--num_actor_devices', default=1, type=int,
-                    help='默认用于模拟的的设备数量')
+                    help='默认用于模拟的的设备数量，默认一个actor')
 parser.add_argument('--num_actors', default=5, type=int,
                     help='每个模拟的设备的actor的数量')
 parser.add_argument('--training_device', default=0, type=int,
-                    help='那个GPU用于训练模型')
+                    help='哪个GPU用于训练模型，就一个learner')
 parser.add_argument('--load_model', action='store_true',
-                    help='是否加载一个已经存在的模型')
+                    help='是否加载一个已经存在的模型，继续训练，加载checkpoint的路径根据你给定的xpid确定')
 parser.add_argument('--disable_checkpoint', action='store_true',
                     help='是否disable checkpoint')
 parser.add_argument('--savedir', default='douzero_checkpoints',
@@ -36,7 +36,7 @@ parser.add_argument('--batch_size', default=32, type=int,
 parser.add_argument('--unroll_length', default=100, type=int,
                     help='The unroll length (time dimension)')
 parser.add_argument('--num_buffers', default=50, type=int,
-                    help='Number of shared-memory buffers')
+                    help='缓存的数量，记录每个操作和状态等，Number of shared-memory buffers')
 parser.add_argument('--num_threads', default=4, type=int,
                     help='Number learner threads')
 parser.add_argument('--max_grad_norm', default=40., type=float,

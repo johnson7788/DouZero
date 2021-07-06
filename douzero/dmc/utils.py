@@ -89,15 +89,34 @@ def create_buffers(flags):
     return buffers
 
 def act(i, device, free_queue, full_queue, model, buffers, flags):
+    """
+    actore的进程开始
+    :param i:
+    :type i:
+    :param device:  设备的序号
+    :type device:  int
+    :param free_queue:
+    :type free_queue:
+    :param full_queue:
+    :type full_queue:
+    :param model: 初始化后的模型
+    :type model:
+    :param buffers:
+    :type buffers:
+    :param flags:
+    :type flags:
+    :return:
+    :rtype:
+    """
     positions = ['landlord', 'landlord_up', 'landlord_down']
     try:
         T = flags.unroll_length
-        log.info('Device %i Actor %i started.', device, i)
-
+        log.info('GPU设备 %i Actor %i 开始运行.', device, i)
+        #初始化斗地主环境
         env = create_env(flags)
         
         env = Environment(env, device)
-
+        # 初始化几个空的buffer
         done_buf = {p: [] for p in positions}
         episode_return_buf = {p: [] for p in positions}
         target_buf = {p: [] for p in positions}
@@ -105,9 +124,9 @@ def act(i, device, free_queue, full_queue, model, buffers, flags):
         obs_action_buf = {p: [] for p in positions}
         obs_z_buf = {p: [] for p in positions}
         size = {p: 0 for p in positions}
-
+        # 环境的初始化
         position, obs, env_output = env.initial()
-
+        # 前向模型，计算需要采取的行动
         while True:
             while True:
                 obs_x_no_action_buf[position].append(env_output['obs_x_no_action'])
@@ -117,6 +136,7 @@ def act(i, device, free_queue, full_queue, model, buffers, flags):
                 _action_idx = int(agent_output['action'].cpu().detach().numpy())
                 action = obs['legal_actions'][_action_idx]
                 obs_action_buf[position].append(_cards2tensor(action))
+                # position： landlord_down'
                 position, obs, env_output = env.step(action)
                 size[position] += 1
                 if env_output['done']:

@@ -20,7 +20,7 @@ deck.extend([20, 30])
 
 class Env:
     """
-    Doudizhu multi-agent wrapper
+    斗地主环境 multi-agent wrapper
     """
     def __init__(self, objective):
         self.objective = objective

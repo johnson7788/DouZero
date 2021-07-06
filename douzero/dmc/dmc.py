@@ -71,7 +71,7 @@ def train(flags):
     T = flags.unroll_length
     B = flags.batch_size
 
-    # Initialize actor models
+    # 初始化 actor models，包括地主，地主上家，地主下家
     models = []
     assert flags.num_actor_devices <= len(flags.gpu_devices.split(',')), 'The number of actor devices can not exceed the number of available devices'
     for device in range(flags.num_actor_devices):
@@ -80,10 +80,10 @@ def train(flags):
         model.eval()
         models.append(model)
 
-    # Initialize buffers
+    # 初始化 buffers
     buffers = create_buffers(flags)
    
-    # Initialize queues
+    # 初始化队列 queues
     actor_processes = []
     ctx = mp.get_context('spawn')
     free_queue = []
@@ -94,10 +94,10 @@ def train(flags):
         free_queue.append(_free_queue)
         full_queue.append(_full_queue)
 
-    # Learner model for training
+    # 学习者模型初始化
     learner_model = Model(device=flags.training_device)
 
-    # Create optimizers
+    # 给学习者的模型初始化优化器， optimizers，学习者也包括地主，2个农民的模型
     optimizers = create_optimizers(flags, learner_model)
 
     # Stat Keys
@@ -112,7 +112,7 @@ def train(flags):
     frames, stats = 0, {k: 0 for k in stat_keys}
     position_frames = {'landlord':0, 'landlord_up':0, 'landlord_down':0}
 
-    # Load models if any
+    # 加载模型，如果存在
     if flags.load_model and os.path.exists(checkpointpath):
         checkpoint_states = torch.load(
                 checkpointpath, map_location="cuda:"+str(flags.training_device)
@@ -127,7 +127,7 @@ def train(flags):
         position_frames = checkpoint_states["position_frames"]
         log.info(f"Resuming preempted job, current stats:\n{stats}")
 
-    # Starting actor processes
+    # 开始 actor processes
     for device in range(flags.num_actor_devices):
         num_actors = flags.num_actors
         for i in range(flags.num_actors):
@@ -175,7 +175,7 @@ def train(flags):
     def checkpoint(frames):
         if flags.disable_checkpoint:
             return
-        log.info('Saving checkpoint to %s', checkpointpath)
+        log.info('即将保存 checkpoint 到 %s', checkpointpath)
         _models = learner_model.get_models()
         torch.save({
             'model_state_dict': {k: _models[k].state_dict() for k in _models},
@@ -186,7 +186,7 @@ def train(flags):
             'position_frames': position_frames
         }, checkpointpath)
 
-        # Save the weights for evaluation purpose
+        # 单独保存权重，用于评估
         for position in ['landlord', 'landlord_up', 'landlord_down']:
             model_weights_dir = os.path.expandvars(os.path.expanduser(
                 '%s/%s/%s' % (flags.savedir, flags.xpid, position+'_weights_'+str(frames)+'.ckpt')))
@@ -194,6 +194,7 @@ def train(flags):
 
     timer = timeit.default_timer
     try:
+        # 按过去的时间，判断是否该保存checkpoint了
         last_checkpoint_time = timer() - flags.save_interval * 60
         while frames < flags.total_frames:
             start_frames = frames
@@ -208,7 +209,7 @@ def train(flags):
             end_time = timer()
             fps = (frames - start_frames) / (end_time - start_time)
             position_fps = {k:(position_frames[k]-position_start_frames[k])/(end_time-start_time) for k in position_frames}
-            log.info('After %i (L:%i U:%i D:%i) frames: @ %.1f fps (L:%.1f U:%.1f D:%.1f) Stats:\n%s',
+            log.info('经过了 %i (地主:%i 地主上家:%i 地主下家:%i) 帧: @ %.1f 总fps (地主fps:%.1f 地主上家fps:%.1f 地主下家fps:%.1f) 当前的状态是:\n%s',
                          frames,
                          position_frames['landlord'],
                          position_frames['landlord_up'],
@@ -224,7 +225,7 @@ def train(flags):
     else:
         for thread in threads:
             thread.join()
-        log.info('Learning finished after %d frames.', frames)
-
+        log.info('学习完成，经过了 %d 帧.', frames)
+    # 保存模型
     checkpoint(frames)
     plogger.close()
